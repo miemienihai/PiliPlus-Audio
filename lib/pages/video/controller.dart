@@ -715,7 +715,9 @@ class VideoDetailController extends GetxController
         setSubtitle(vttSubtitlesIndex.value);
         if (!hasJumpedToAudio) {
             hasJumpedToAudio = true;
-            toAudioPage();
+            Future.delayed(const Duration(milliseconds: 500), () {
+            playedTime = plPlayerController.position;
+            toAudioPage(); });
       }
       },
       width: firstVideo.width,
