@@ -728,7 +728,7 @@ class VideoDetailController extends GetxController
         
               // 更新 playedTime
               playedTime = plPlayerController.position;
-        
+             plPlayerController.videoPlayerController!.pause();
               // 延迟一点点，确保播放器和 AudioHandler 完全准备好
               Future.delayed(const Duration(milliseconds: 100), () {
                 toAudioPage();
