@@ -115,6 +115,8 @@ class VideoDetailController extends GetxController
   AudioQuality? currentAudioQa;
   late VideoDecodeFormatType currentDecodeFormats;
 
+  // 是否自动跳转到音频播放界面
+  bool hasJumpedToAudio = false;
   // 是否开始自动播放 存在多p的情况下，第二p需要为true
   final RxBool _autoPlay = Pref.autoPlayEnable.obs;
 
@@ -711,6 +713,10 @@ class VideoDetailController extends GetxController
       onInit: () {
         videoState.value = true;
         setSubtitle(vttSubtitlesIndex.value);
+        if (!hasJumpedToAudio) {
+            hasJumpedToAudio = true;
+            toAudioPage();
+      }
       },
       width: firstVideo.width,
       height: firstVideo.height,
@@ -1207,6 +1213,8 @@ class VideoDetailController extends GetxController
     animController?.dispose();
     subtitles.clear();
     vttSubtitles.clear();
+    // 恢复自动播放开关
+    hasJumpedToAudio = false;
     super.onClose();
   }
 
