@@ -714,7 +714,7 @@ class VideoDetailController extends GetxController
         videoState.value = true;
         setSubtitle(vttSubtitlesIndex.value);
       // 监听播放器播放状态，确保的确开始播放后，再去跳转到AudioPage()界面！
-        plPlayerController.stream.playing.listen((playing) async {
+        plPlayerController.videoPlayerController?.stream.playing.listen((playing) async  {
             if (!hasJumpedToAudio && playing) {
               // 标记只执行一次
               hasJumpedToAudio = true;
@@ -735,6 +735,7 @@ class VideoDetailController extends GetxController
               });
             }
       });
+    
       },
       width: firstVideo.width,
       height: firstVideo.height,
