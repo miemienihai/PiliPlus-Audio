@@ -713,12 +713,28 @@ class VideoDetailController extends GetxController
       onInit: () {
         videoState.value = true;
         setSubtitle(vttSubtitlesIndex.value);
-        if (!hasJumpedToAudio) {
-            hasJumpedToAudio = true;
-            Future.delayed(const Duration(milliseconds: 500), () {
-            playedTime = plPlayerController.position;
-            toAudioPage(); });
-      }
+      // 监听播放器播放状态，确保的确开始播放后，再去跳转到AudioPage()界面！
+        plPlayerController.stream.playing.listen((playing) async {
+            if (!hasJumpedToAudio && playing) {
+              // 标记只执行一次
+              hasJumpedToAudio = true;
+        
+              // 等播放器 position 更新，确保播放已经真正开始
+              Duration currentPosition = plPlayerController.position;
+              if (currentPosition == Duration.zero) {
+                // 如果 position 还没更新，延迟等待
+                await Future.delayed(const Duration(milliseconds: 200));
+              }
+        
+              // 更新 playedTime
+              playedTime = plPlayerController.position;
+        
+              // 延迟一点点，确保播放器和 AudioHandler 完全准备好
+              Future.delayed(const Duration(milliseconds: 100), () {
+                toAudioPage();
+              });
+            }
+      });
       },
       width: firstVideo.width,
       height: firstVideo.height,
