@@ -1,6 +1,6 @@
 workflows:
   android-apk-build:
-    name: Android APK Build
+    name: Android APK Build + iOS IPA
     max_build_duration: 60
 
     environment:
@@ -23,19 +23,38 @@ workflows:
       - name: Get dependencies
         script: flutter pub get
 
-      # 如果你有 codegen（你这里有 build_runner）
       - name: Generate files
         script: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build APK
+      # ✅ 只构建 arm64 APK（关键修改）
+      - name: Build ARM64 APK
         script: |
           flutter build apk \
             --release \
-            --split-per-abi
+            --target-platform android-arm64
+
+      # ✅ 构建 iOS IPA（用于巨魔 TrollStore）
+      - name: Build iOS IPA
+        script: |
+          flutter build ios --release --no-codesign
+
+          mkdir -p build/ios/ipa
+
+          cd build/ios/iphoneos
+
+          mkdir Payload
+          cp -r Runner.app Payload/
+
+          zip -r ../ipa/app.ipa Payload
 
     artifacts:
+      # APK
       - build/app/outputs/flutter-apk/*.apk
 
+      # IPA（巨魔用）
+      - build/ios/ipa/*.ipa
+
+    # ❌ 不发布 Google Play（已移除 publishing google_play）
     publishing:
       email:
         recipients:
