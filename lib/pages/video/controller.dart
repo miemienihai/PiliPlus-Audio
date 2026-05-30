@@ -763,7 +763,7 @@ class VideoDetailController extends GetxController
               hasDashAudio: entry.hasDashAudio,
             )
           : NetworkSource(
-              videoSource: video ?? videoUrl!,
+              videoSource: "",
               audioSource: audio ?? audioUrl,
             ),
       seekTo: seek,
