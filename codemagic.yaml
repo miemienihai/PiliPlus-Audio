@@ -1,7 +1,7 @@
 workflows:
   android-apk-build:
     environment:
-      flutter: 3.44.0
+      flutter: 3.44.1
 
     scripts:
       - flutter build apk --release --target-platform android-arm64
