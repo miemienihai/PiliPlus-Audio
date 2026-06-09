@@ -260,7 +260,7 @@ abstract final class VideoHttp {
         }
         return Success(data);
       } else if (epid != null && videoType == VideoType.ugc) {
-        return videoUrl(
+        return await videoUrl(
           avid: avid,
           bvid: bvid,
           cid: cid,
@@ -851,7 +851,7 @@ abstract final class VideoHttp {
       ..writeAll(
         list.map(
           (item) =>
-              '${item?['sid'] ?? 0}\n${_subtitleTimecode(item['from'])} --> ${_subtitleTimecode(item['to'])}\n${item['content'].trim()}',
+              '${_subtitleTimecode(item['from'])} --> ${_subtitleTimecode(item['to'])}\n${item['content'].trim()}',
         ),
         '\n\n',
       );
