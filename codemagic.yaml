@@ -3,14 +3,7 @@ workflows:
     environment:
       flutter: 3.44.0
 
-    triggering:
-      events:
-        - push
-
     scripts:
-      - flutter pub cache repair
-      - rm -f pubspec.lock
-      - flutter pub get
       - flutter build apk --release --target-platform android-arm64
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
